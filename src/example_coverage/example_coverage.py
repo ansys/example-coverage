@@ -7,7 +7,7 @@ import pyaedt
 def get_module_from_package_name(package_path):
     # get the directory of the entry package
     directory_name = os.path.dirname(package_path)
-    # eturn the name of the entry package
+    # return the name of the entry package
     return os.path.basename(directory_name)
 
 
@@ -23,10 +23,8 @@ def discover_modules(package_path, recurse=True):
 
     Parameters
     ----------
-    entry : module, optional
-        The entry point of the submodule search. Defaults to the main
-        ``pyaedt`` module.
-
+    package_path : str
+        The path of the package to be analyzed for example coverage.
     recurse : bool, optional
         Whether to recurse into submodules.
 
@@ -37,7 +35,7 @@ def discover_modules(package_path, recurse=True):
 
     """
 
-    entry_package = get_module_from_package_name(entry)
+    entry_package = get_module_from_package_name(package_path)
     entry = globals()[entry_package]
 
     entry_name = entry.__name__
@@ -81,7 +79,7 @@ def evaluate_examples_coverage(package_path, recurse=True):
     Parameters
     ----------
     package_path : string
-        Name of the package containing the module to inspect.
+        The path of the package to be analyzed for example coverage.
     recurse : bool, optional
         Specify whether to recurse into submodules or not.
     """
@@ -156,13 +154,9 @@ def evaluate_examples_coverage(package_path, recurse=True):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Process some integers.')
-    # parser.add_argument('-p', '--package_name',
-    #     help='name of the package to perform coverage analysis on')
-    # parser.add_argument('-r', '--recurse', default=True, type = bool,
-    #     help='specify whether to recurse into submodules or not')
+    parser.add_argument('-p', '--package',
+        help='name of the package to perform coverage analysis on')
+    parser.add_argument('-r', '--recurse', default=True, type = bool,
+        help='specify whether to recurse into submodules or not')
     args = parser.parse_args()
-    #evaluate_examples_coverage(package_name = args.package_name, recurse = args.recurse)
-    evaluate_examples_coverage(args[1], args[2])
-
-
-    evaluate_examples_coverage()
+    evaluate_examples_coverage(args.package, args.recurse)
