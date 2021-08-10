@@ -1,8 +1,17 @@
 from doctest import DocTestFinder
 from types import ModuleType
+import os
+import argparse
 import pyaedt
 
-def discover_modules(entry=pyaedt, recurse=True):
+def get_module_from_package_name(package_path):
+    # get the directory of the entry package
+    directory_name = os.path.dirname(package_path)
+    # eturn the name of the entry package
+    return os.path.basename(directory_name)
+
+
+def discover_modules(package_path, recurse=True):
     """Discover the submodules present under an entry point.
 
     If ``recurse=True``, search goes all the way into descendants of the
@@ -27,6 +36,10 @@ def discover_modules(entry=pyaedt, recurse=True):
         A (module name -> module) mapping of submodules under ``entry``.
 
     """
+
+    entry_package = get_module_from_package_name(entry)
+    entry = globals()[entry_package]
+
     entry_name = entry.__name__
     found_modules = {}
     next_entries = [entry]
@@ -62,20 +75,22 @@ def discover_modules(entry=pyaedt, recurse=True):
 
     return found_modules
 
-def evaluate_examples_coverage(modules=None):
+def evaluate_examples_coverage(package_path, recurse=True):
     """Check whether doctests can be run as-is without errors.
 
     Parameters
     ----------
-    modules : dict, optional
-        (module name -> module) mapping of submodules defined in a
-        package as returned by ``discover_modules()``. If omitted,
-        ``discover_modules()`` will be called for ``pyaedt``.
-
+    package_path : string
+        Name of the package containing the module to inspect.
+    recurse : bool, optional
+        Specify whether to recurse into submodules or not.
     """
     # Get the modules to analyze.
-    if modules is None:
-        modules = discover_modules()
+    if package_path is None:
+        raise ValueError(f"{package_path} cannot be None. A package name must be provided")
+    else:
+        # import package_path
+        modules = discover_modules(package_path, recurse)
 
     # Find and parse all docstrings.
     doctests = {}
@@ -139,4 +154,15 @@ def evaluate_examples_coverage(modules=None):
 
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    # parser.add_argument('-p', '--package_name',
+    #     help='name of the package to perform coverage analysis on')
+    # parser.add_argument('-r', '--recurse', default=True, type = bool,
+    #     help='specify whether to recurse into submodules or not')
+    args = parser.parse_args()
+    #evaluate_examples_coverage(package_name = args.package_name, recurse = args.recurse)
+    evaluate_examples_coverage(args[1], args[2])
+
+
     evaluate_examples_coverage()
