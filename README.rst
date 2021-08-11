@@ -29,21 +29,22 @@ It automatically detects whether it is running in an IronPython or CPython
 environment and initializes the Desktop accordingly. PyAEDT also provides
 advanced error management. Usage examples follow.
 
-Explicit Desktop declaration and error management
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Analyze a module and all the submodules it contains.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: python
+.. code:: bat
 
-    Launch AEDT 2021 R1 in Non-Graphical mode
+    python example_coverage -p"path_to_pacakge\\__init__.py"
 
-    from pyaedt import Desktop, Circuit
-    with Desktop("2021.1", NG=True):
-        circuit = Circuit()
-        ...
-        # Any error here will be caught by Desktop.
-        ...
 
-    # Desktop is automatically released here.
+Name                                      Methods     Missed   Covered
+-------------------------------------------------------------------------------
+my_package.moduleA.submolduleA                3          3       0.0%
+my_package.moduleA.submolduleA                6          3      50.0%
+my_package.moduleA.submolduleA                1          0     100.0%
+my_package.moduleB                            4          1      75.0%
+-------------------------------------------------------------------------------
+Total                                        14          7        50%
 
 
 License
