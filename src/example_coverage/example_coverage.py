@@ -1,14 +1,26 @@
 from doctest import DocTestFinder
 from types import ModuleType
 import os
+import sys
 import argparse
-import pyaedt
+import importlib
+#import pyaedt
 
 def get_module_from_package_name(package_path):
+
     # get the directory of the entry package
     directory_name = os.path.dirname(package_path)
     # return the name of the entry package
-    return os.path.basename(directory_name)
+    module_name = os.path.basename(directory_name)
+
+    sys.path.append(os.path.abspath(package_path))
+
+    spec = importlib.util.spec_from_file_location(module_name, package_path)
+    entry_module = importlib.util.module_from_spec(spec)
+    # import pdb
+    # pdb.set_trace()
+    return entry_module
+
 
 
 def discover_modules(package_path, recurse=True):
@@ -35,8 +47,20 @@ def discover_modules(package_path, recurse=True):
 
     """
 
-    entry_package = get_module_from_package_name(package_path)
-    entry = globals()[entry_package]
+    sys.path.append(os.path.abspath(package_path))
+    module = get_module_from_package_name(package_path)
+    spec = importlib.util.spec_from_file_location(module.__name__, package_path)
+    foo = importlib.util.module_from_spec(spec)
+    # spec.loader.exec_module(foo)
+    # #spec.loader.load_module(r"d:\GitHub\pyaedt\pyaedt\__init__.py")
+
+    # importlib.import_module("pyaedt")
+    # importlib.invalidate_caches()
+    import pdb
+    pdb.set_trace()
+    #globals()[module.__name__] = module
+    entry = globals()[module.__name__]
+
 
     entry_name = entry.__name__
     found_modules = {}
