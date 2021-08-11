@@ -98,7 +98,7 @@ def evaluate_examples_coverage(package_path, recurse=True):
             for doctest in DocTestFinder(recurse=True).find(module, globs={})
             }
 
-    print ("Name                                      Methods     Missed   Covered")
+    print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
 
     # Those dictionaries can later be used to extract 
@@ -133,7 +133,7 @@ def evaluate_examples_coverage(package_path, recurse=True):
             # If no docstring is available in the module, coverage is considered to be 100%.
             percentage_covered = 100
 
-        print(f'{module_name : <37}{total : ^19}{missing : ^4}{percentage_covered:8.1f}%')
+        print(f'{module_name[:42]: <43}{total:12}{missing:11}{percentage_covered:9.1f}%')
 
     # Get the stats for the entire package.
     all_methods_with_example_list = []
@@ -148,12 +148,12 @@ def evaluate_examples_coverage(package_path, recurse=True):
     package_missing = len(all_methods_without_example_list)
     package_percentage_covered = (package_total - package_missing) / package_total * 100
     print ('-' * 79)
-    print(f'{"Total" : <37}{package_total : ^19}{package_missing : ^4}{package_percentage_covered:8.1f}%')
+    print(f'{"Total" : <43}{package_total : 12d}{package_missing : 11d}{package_percentage_covered:8.1f}%')
 
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')
     parser.add_argument('-p', '--package',
         help='name of the package to perform coverage analysis on')
     parser.add_argument('-r', '--recurse', default=True, type = bool,
