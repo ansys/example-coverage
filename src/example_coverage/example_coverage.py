@@ -4,7 +4,6 @@ import os
 import sys
 import argparse
 import importlib
-#import pyaedt
 
 def get_module_from_package_name(package_path):
 
@@ -13,12 +12,11 @@ def get_module_from_package_name(package_path):
     # return the name of the entry package
     module_name = os.path.basename(directory_name)
 
-    sys.path.append(os.path.abspath(package_path))
+    sys.path.append(os.path.abspath(directory_name))
 
     spec = importlib.util.spec_from_file_location(module_name, package_path)
     entry_module = importlib.util.module_from_spec(spec)
-    # import pdb
-    # pdb.set_trace()
+
     return entry_module
 
 
@@ -47,29 +45,18 @@ def discover_modules(package_path, recurse=True):
 
     """
 
-    sys.path.append(os.path.abspath(package_path))
     module = get_module_from_package_name(package_path)
-    spec = importlib.util.spec_from_file_location(module.__name__, package_path)
-    foo = importlib.util.module_from_spec(spec)
-    # spec.loader.exec_module(foo)
-    # #spec.loader.load_module(r"d:\GitHub\pyaedt\pyaedt\__init__.py")
 
-    # importlib.import_module("pyaedt")
-    # importlib.invalidate_caches()
-    import pdb
-    pdb.set_trace()
-    #globals()[module.__name__] = module
-    entry = globals()[module.__name__]
-
-
-    entry_name = entry.__name__
+    entry_module = __import__(module.__name__)
+    entry_name = entry_module.__name__
     found_modules = {}
-    next_entries = [entry]
+    next_entries = [entry_module]
+
     while next_entries:
         next_modules = {}
-        for entry in next_entries:
-            for attribute in dir(entry):
-                attribute_value = getattr(entry, attribute)
+        for entry_module in next_entries:
+            for attribute in dir(entry_module):
+                attribute_value = getattr(entry_module, attribute)
                 if not isinstance(attribute_value, ModuleType):
                     continue
 
