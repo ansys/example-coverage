@@ -5,6 +5,7 @@ import sys
 import argparse
 import importlib
 import pathlib
+import pkgutil
 
 def get_module_from_package_name(package_path):
 
@@ -67,10 +68,12 @@ def discover_modules(package_path, recurse=True):
 
     """
 
-    module = get_module_from_package_name(package_path)
+    #module = get_module_from_package_name(package_path)
 
     import pdb
     pdb.set_trace()
+
+    module = package_path
 
     entry_module = __import__(module.__name__)
     entry_name = entry_module.__name__
@@ -112,6 +115,14 @@ def discover_modules(package_path, recurse=True):
 
     return found_modules
 
+def list_module(package_path):
+    modules = {}
+    sys.path.append(package_path)
+    for importer, modname, ispkg in pkgutil.walk_packages([package_path], os.path.basename(package_path) + '.'):
+        module = __import__(modname)
+        modules[modname] = module
+    return modules
+
 def evaluate_examples_coverage(package_path, recurse=True):
     """Check whether doctests can be run as-is without errors.
 
@@ -127,7 +138,11 @@ def evaluate_examples_coverage(package_path, recurse=True):
         raise ValueError(f"{package_path} cannot be None. A package name must be provided")
     else:
         # import package_path
-        modules = discover_modules(package_path, recurse)
+        #modules = discover_modules(package_path, recurse)
+        modules = {}
+        for importer, modname, ispkg in pkgutil.walk_packages([package_path], os.path.basename(package_path) + '.'):
+            module = __import__(modname)
+            modules[modname] = module
 
     import pdb
     pdb.set_trace()
@@ -139,6 +154,9 @@ def evaluate_examples_coverage(package_path, recurse=True):
             doctest.name: doctest
             for doctest in DocTestFinder(recurse=True).find(module, globs={})
             }
+
+    import pdb
+    pdb.set_trace()
 
     print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
