@@ -1,5 +1,8 @@
 import setuptools
 import os
+from io import open as io_open
+from setuptools import setup, find_packages, find_namespace_packages
+
 
 with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -7,13 +10,26 @@ with open("README.rst", "r", encoding="utf-8") as fh:
 # loosely from https://packaging.python.org/guides/single-sourcing-package-version/
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(current_dir, "src", "pyaedt", "version.txt"), 'r') as f:
-    version = f.readline()
+# Get version from version file
+__version__ = None
+version_file = os.path.join(current_dir, 'ansys', 'tools', 'example_coverage',
+                            '_version.py')
+
+with io_open(version_file, mode='r') as fd:
+    # execute file from raw string
+    exec(fd.read())
+
+
+# find namespace packages
+packages = []
+for package in find_namespace_packages(include='ansys*'):
+    if package.startswith('ansys.tools.example_coverage'):
+        packages.append(package)
 
 
 setuptools.setup(
     name="example-coverage",
-    version="0.0.1",
+    version=__version__,
     author='ANSYS, Inc.',
     author_email="maxime.rey@ansys.com",
     description="Tools to assess the docstring examples coverage.",
@@ -28,7 +44,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src"),
+    packages=packages,
     python_requires=">=3.6",
 )
