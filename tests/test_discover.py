@@ -3,6 +3,7 @@ import sys
 import pytest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', "src", "example_coverage")))
 import example_coverage
+sys.path.append("D:\\GitHub\\example-coverage\\tests\\assets\\moduleC")
 
 class TestClass:
     def setup_class(self):

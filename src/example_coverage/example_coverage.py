@@ -4,6 +4,7 @@ import os
 import sys
 import argparse
 import importlib
+import pathlib
 
 def get_module_from_package_name(package_path):
 
@@ -13,13 +14,34 @@ def get_module_from_package_name(package_path):
     module_name = os.path.basename(directory_name)
 
     sys.path.append(os.path.abspath(directory_name))
-
     spec = importlib.util.spec_from_file_location(module_name, package_path)
-    entry_module = importlib.util.module_from_spec(spec)
+    # entry_module = importlib.util.module_from_spec(spec)
+
+    entry_module = __import__(module_name)
 
     return entry_module
 
 
+def get_modules(package_path):
+    sys.path.append(os.path.dirname(package_path))
+    module_extensions = ('.py')
+    package_name = os.path.basename(os.path.dirname(package_path))
+    modules = {}
+
+    for path, subdirs, files in os.walk(os.path.dirname(package_path)):
+        for name in files:
+            if name.endswith(module_extensions) & (not name.endswith("__init__.py")):
+
+                module_name = package_name + path.split(package_name)[-1].replace(os.path.sep, ".") + "." + pathlib.Path(name).stem
+
+                # spec = importlib.util.spec_from_file_location(module_name, os.path.join(package_path, "__init__.py"))
+                # module = importlib.util.module_from_spec(spec)
+                module = __import__(module_name)
+                modules[module.__name__] = module
+
+    import pdb
+    pdb.set_trace()
+    return modules
 
 def discover_modules(package_path, recurse=True):
     """Discover the submodules present under an entry point.
@@ -46,6 +68,9 @@ def discover_modules(package_path, recurse=True):
     """
 
     module = get_module_from_package_name(package_path)
+
+    import pdb
+    pdb.set_trace()
 
     entry_module = __import__(module.__name__)
     entry_name = entry_module.__name__
@@ -82,6 +107,9 @@ def discover_modules(package_path, recurse=True):
         if found_modules[key].__file__.endswith("__init__.py"):
             del found_modules[key]
 
+    import pdb
+    pdb.set_trace()
+
     return found_modules
 
 def evaluate_examples_coverage(package_path, recurse=True):
@@ -100,6 +128,9 @@ def evaluate_examples_coverage(package_path, recurse=True):
     else:
         # import package_path
         modules = discover_modules(package_path, recurse)
+
+    import pdb
+    pdb.set_trace()
 
     # Find and parse all docstrings.
     doctests = {}
