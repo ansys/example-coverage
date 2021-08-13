@@ -6,6 +6,7 @@ import argparse
 import importlib
 import pathlib
 import pkgutil
+import glob
 
 def get_module_from_package_name(package_path):
 
@@ -44,6 +45,40 @@ def get_modules(package_path):
     pdb.set_trace()
     return modules
 
+
+def import_from_file(source_file):
+    """Import a source file as a python module"""
+
+    # get module name
+    module_name = pathlib.Path(os.path.basename(source_file)).stem
+
+    # execute module
+    spec = importlib.util.spec_from_file_location(module_name, source_file)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+def get_all_modules(package_path):
+    modules = {}
+
+    sys.path.append(package_path)
+    spec = importlib.util.spec_from_file_location(os.path.basename(package_path), os.path.join(package_path,"__init__.py"))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+
+    # loop through all attributes in the source file
+    for source_file in glob.glob(os.path.join(package_path, '*.py')):
+        # if "__init__.py" in source_file:
+        #     continue
+        breakpoint()
+        module = import_from_file(source_file)
+        modules[module.__name__] = module
+    return modules
+
+
+
+
 def discover_modules(package_path, recurse=True):
     """Discover the submodules present under an entry point.
 
@@ -69,9 +104,6 @@ def discover_modules(package_path, recurse=True):
     """
 
     #module = get_module_from_package_name(package_path)
-
-    import pdb
-    pdb.set_trace()
 
     module = package_path
 
@@ -137,15 +169,15 @@ def evaluate_examples_coverage(package_path, recurse=True):
     if package_path is None:
         raise ValueError(f"{package_path} cannot be None. A package name must be provided")
     else:
-        # import package_path
-        #modules = discover_modules(package_path, recurse)
-        modules = {}
-        for importer, modname, ispkg in pkgutil.walk_packages([package_path], os.path.basename(package_path) + '.'):
-            module = __import__(modname)
-            modules[modname] = module
+        modules = get_all_modules(package_path)
 
-    import pdb
-    pdb.set_trace()
+        #modules = discover_modules(package_path, recurse)
+
+        # modules = {}
+        # for importer, modname, ispkg in pkgutil.walk_packages([package_path], os.path.basename(package_path) + '.'):
+        #     module = __import__(modname)
+        #     modules[modname] = module
+
 
     # Find and parse all docstrings.
     doctests = {}
@@ -155,8 +187,6 @@ def evaluate_examples_coverage(package_path, recurse=True):
             for doctest in DocTestFinder(recurse=True).find(module, globs={})
             }
 
-    import pdb
-    pdb.set_trace()
 
     print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
