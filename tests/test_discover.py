@@ -55,7 +55,7 @@ Total                                                 5          1     80.0%
         """ The package tested is made of a single module.
         None __init__.py file is available.
         In this module, there is a single private function.
-        So, none example is expecte for this entire module."""
+        So, none example is expected for this entire module."""
         folder_path = os.path.join(self.current_directory, "assets", "moduleB")
 
         # Redirect stdout.

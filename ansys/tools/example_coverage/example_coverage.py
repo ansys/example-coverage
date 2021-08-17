@@ -4,7 +4,6 @@ import sys
 import glob
 import argparse
 import pathlib
-import tempfile
 
 def find_files(folder_path):
     """Find all modules available in the folder path provided.
@@ -35,6 +34,8 @@ def create_report(folder_path, output_file=""):
     print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
 
+    # the key of those dictionaries will be the file name.
+    # So we can easily extract specific information for every module.
     all_methods_with_example = {}
     all_methods_without_example = {}
 
