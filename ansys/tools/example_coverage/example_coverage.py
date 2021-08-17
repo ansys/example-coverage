@@ -4,8 +4,16 @@ import sys
 import glob
 import argparse
 import pathlib
+import tempfile
 
 def find_files(folder_path):
+    """Find all modules available in the folder path provided.
+    However, __init__.py will be discarded."""
+
+    # Raise an exception if the folder is empty.
+    if len(os.listdir(folder_path)) == 0:
+        raise Exception("None file nor folder available in {path}.")
+
     module_extension = ('.py')
     modules = []
     # for file in glob.glob(os.path.join(folder_path, '*.py')):
@@ -17,16 +25,20 @@ def find_files(folder_path):
             if name.endswith(module_extension) & (not name.endswith("__init__.py")):
                 modules.append(os.path.join(path,name))
 
+    # Raise an exception if none module was discovered in the input folder.
+    if not modules:
+        raise Exception(f"None module found in: {folder_path}.")
+
     return modules
 
-def create_report(folder_path):
+def create_report(folder_path, output_file=""):
     print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
 
     all_methods_with_example = {}
     all_methods_without_example = {}
 
-    for file in find_files(r'D:\GitHub\pyaedt\pyaedt'):
+    for file in find_files(folder_path):
         with open(file) as fd:
             file_contents = fd.read()
         tree = ast.parse(file_contents)
@@ -35,13 +47,15 @@ def create_report(folder_path):
         covered_functions = []
         func_definitions = [node for node in tree.body if isinstance(node, ast.FunctionDef)]
         for func in func_definitions:
+            # private function are not expected to provide any examples
+            if func.name.startswith('_'):
+                continue
             if (ast.get_docstring(func) is None) or ("Example" not in ast.get_docstring(func)):
                 missing_functions.append(func.name)
             else:
                 covered_functions.append(func.name)
 
         class_definitions = [node for node in tree.body if isinstance(node, ast.ClassDef)]
-
 
         method_definitions = []
         missing_classes = []
@@ -53,16 +67,34 @@ def create_report(folder_path):
             else:
                 covered_classes.append(class_def.name)
 
-
         missing_methods = []
         covered_methods = []
         if len(method_definitions)!=0:
             for method in method_definitions[0]:
+                # handle method with decorator
+                # property setters should not have any example but getters do
+                if method.decorator_list:
+                    for decorator in method.decorator_list:
+                        # property getter attribute
+                        if isinstance(decorator, ast.Name) and (decorator.id == "property"):
+                            if ("Example" not in ast.get_docstring(method)):
+                                missing_methods.append(method.name)
+                            else:
+                                covered_methods.append(method.name)
+                        # property setter attribute
+                        elif isinstance(decorator,ast.Attribute) and (decorator.attr == "setter"):
+                            # For setter methods, we consider them covered.
+                            covered_methods.append(method.name)
+                            break;
+                    continue;
+
+                # private methods are not expected to provide any examples
+                if method.name.startswith('_'):
+                    continue
                 if (ast.get_docstring(method) is None) or ("Example" not in ast.get_docstring(method)):
                     missing_methods.append(method.name)
                 else:
                     covered_methods.append(method.name)
-
 
         # WRITE REPORT
         all_methods_without_example[file] = missing_functions + missing_classes + missing_methods
@@ -94,16 +126,22 @@ def create_report(folder_path):
 
     package_total = len(all_methods_with_example_list) + len(all_methods_without_example_list)
     package_missing = len(all_methods_without_example_list)
-    package_percentage_covered = (package_total - package_missing) / package_total * 100
-    print ('-' * 79)
-    print(f'{"Total" : <43}{package_total : 12d}{package_missing : 11d}{package_percentage_covered:8.1f}%')
 
+    if package_total!=0:
+        package_percentage_covered = (package_total - package_missing) / package_total * 100
+    else:
+        # If none example is expected in the entire package, coverage is considered to be 100%.
+        package_percentage_covered = 100
+    print ('-' * 79)
+    print(f'{"Total" : <43}{package_total : 12d}{package_missing : 11d}{package_percentage_covered:9.1f}%')
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')
     parser.add_argument('-f', '--folder',
         help='path of the package to perform coverage analysis on')
+    # parser.add_argument('-o', '--output_file', default="", type = str,
+    #     help='path of the report file')
     # parser.add_argument('-r', '--recurse', default=True, type = bool,
     #     help='specify whether to recurse into submodules or not')
     args = parser.parse_args()
