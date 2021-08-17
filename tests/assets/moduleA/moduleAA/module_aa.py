@@ -15,7 +15,7 @@ def testing_function():
     return "testing"
 
 
-class ClassC:
+class ClassAA:
     """Class for testing purpose.
 
     Parameters
@@ -25,33 +25,33 @@ class ClassC:
 
     Examples
     --------
-    Instantiate a ClassC object.
+    Instantiate a ClassAA object.
 
-    >>> class_c = ClassC("test")
+    >>> class_aa = ClassAA("test")
 
     """
     @property
-    def my_property_c(self):
+    def my_property_aa(self):
         """Property for testing."""
-        return self._my_property_c
+        return self._my_property_aa
 
-    @my_property_c.setter
-    def my_property_c(self, value):
-        self._my_property_c = value
+    @my_property_aa.setter
+    def my_property_aa(self, value):
+        self._my_property_aa = value
 
     def __init__(self, input):
-        self._my_property_c = input
+        self._my_property_aa = input
 
-    def _private_method_c(self):
+    def _private_method_aa(self):
         """Private method"""
         pass
 
-    def method_c(self):
+    def method_aa(self):
         """Method for test.
 
         Examples
         --------
-        >>> class_c = ClassC("test")
-        >>> class_c.method_c()
+        >>> class_aa = ClassAA("test")
+        >>> class_aa.method_aa()
 
         """
