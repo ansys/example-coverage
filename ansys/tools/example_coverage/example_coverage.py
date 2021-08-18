@@ -74,23 +74,31 @@ def create_report(folder_path):
             for method in method_definitions[0]:
                 # Handle method with decorator.
                 # Property setters should not have any example but getters do.
+                property = False
                 if method.decorator_list:
                     for decorator in method.decorator_list:
                         # Find property getter decorator.
                         if isinstance(decorator, ast.Name) and (decorator.id == "property"):
                             if ast.get_docstring(method) is None:
                                 missing_methods.append(method.name)
+                                property = True
                             elif ("Example" not in ast.get_docstring(method)):
                                 missing_methods.append(method.name)
+                                property = True
                             else:
                                 covered_methods.append(method.name)
+                                property = True
                         # Find property setter decorator.
                         elif isinstance(decorator,ast.Attribute) and (decorator.attr == "setter"):
                             # For setter methods, we consider them covered.
                             covered_methods.append(method.name)
-                            break;
-                    continue;
-                # breakpoint()
+                            property = True
+
+                # If the method was a property, it has already been dealt with.
+                # There is no need to continue the current method inspection.
+                if property:
+                    continue
+
                 # Private methods are not expected to provide any examples.
                 if method.name.startswith('_'):
                     continue
@@ -98,8 +106,8 @@ def create_report(folder_path):
                     missing_methods.append(method.name)
                 else:
                     covered_methods.append(method.name)
-        if "Hfss" in class_def.name:
-            breakpoint()
+        # if "Hfss" in class_def.name:
+        #     breakpoint()
 
         # Write report.
         all_methods_without_example[file] = missing_functions + missing_classes + missing_methods
