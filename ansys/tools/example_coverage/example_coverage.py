@@ -34,7 +34,7 @@ def create_report(folder_path, output_file=""):
     print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
 
-    # the key of those dictionaries will be the file name.
+    # The key of those dictionaries will be the file name.
     # So we can easily extract specific information for every module.
     all_methods_with_example = {}
     all_methods_without_example = {}
@@ -111,7 +111,6 @@ def create_report(folder_path, output_file=""):
             # If no docstring is available in the module, coverage is considered to be 100%.
             percentage_covered = 100
 
-        #module_name = file.split("C:\\Users\\mrey\\AppData\\Local\\Programs\\Python\\Python38\\Lib\\html\\")[1].replace(os.path.sep, ".")
         module_name = os.path.basename(folder_path) + pathlib.Path(file.split(folder_path)[1].replace(os.path.sep, ".")).stem
 
         print(f'{module_name[:42]: <43}{total:12}{missing:11}{percentage_covered:9.1f}%')
