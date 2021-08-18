@@ -6,11 +6,12 @@ import pathlib
 
 def find_files(folder_path):
     """Find all modules available in the folder path provided.
+    The selection is made based on the file's extension.
     However, __init__.py will be discarded."""
 
     # Raise an exception if the folder is empty.
     if len(os.listdir(folder_path)) == 0:
-        raise Exception("None file nor folder available in {path}.")
+        raise Exception(f"None file nor folder available in {folder_paths}.")
 
     module_extension = ('.py')
     modules = []
@@ -26,15 +27,18 @@ def find_files(folder_path):
 
     return modules
 
-def create_report(folder_path, output_file=""):
+def create_report(folder_path):
+    """Write a report to list all modules and the docstring example
+    coverage stats for each of these modules."""
     print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
 
-    # The key of those dictionaries will be the file name.
+    # The key of those dictionaries will be the name of the file.
     # So we can easily extract specific information for every module.
     all_methods_with_example = {}
     all_methods_without_example = {}
 
+    # Abstract tree structure is used to get all functions, classes, methods.
     for file in find_files(folder_path):
         with open(file) as fd:
             file_contents = fd.read()
@@ -42,15 +46,15 @@ def create_report(folder_path, output_file=""):
 
         missing_functions = []
         covered_functions = []
-        func_definitions = [node for node in tree.body if isinstance(node, ast.FunctionDef)]
-        for func in func_definitions:
+        function_definitions = [node for node in tree.body if isinstance(node, ast.FunctionDef)]
+        for function in function_definitions:
             # private function are not expected to provide any examples
-            if func.name.startswith('_'):
+            if function.name.startswith('_'):
                 continue
-            if (ast.get_docstring(func) is None) or ("Example" not in ast.get_docstring(func)):
-                missing_functions.append(func.name)
+            if (ast.get_docstring(function) is None) or ("Example" not in ast.get_docstring(function)):
+                missing_functions.append(function.name)
             else:
-                covered_functions.append(func.name)
+                covered_functions.append(function.name)
 
         class_definitions = [node for node in tree.body if isinstance(node, ast.ClassDef)]
 
@@ -68,24 +72,24 @@ def create_report(folder_path, output_file=""):
         covered_methods = []
         if len(method_definitions)!=0:
             for method in method_definitions[0]:
-                # handle method with decorator
-                # property setters should not have any example but getters do
+                # Handle method with decorator.
+                # Property setters should not have any example but getters do.
                 if method.decorator_list:
                     for decorator in method.decorator_list:
-                        # property getter attribute
+                        # Find property getter decorator.
                         if isinstance(decorator, ast.Name) and (decorator.id == "property"):
                             if ("Example" not in ast.get_docstring(method)):
                                 missing_methods.append(method.name)
                             else:
                                 covered_methods.append(method.name)
-                        # property setter attribute
+                        # Find property setter decorator.
                         elif isinstance(decorator,ast.Attribute) and (decorator.attr == "setter"):
                             # For setter methods, we consider them covered.
                             covered_methods.append(method.name)
                             break;
                     continue;
 
-                # private methods are not expected to provide any examples
+                # Private methods are not expected to provide any examples.
                 if method.name.startswith('_'):
                     continue
                 if (ast.get_docstring(method) is None) or ("Example" not in ast.get_docstring(method)):
@@ -93,7 +97,7 @@ def create_report(folder_path, output_file=""):
                 else:
                     covered_methods.append(method.name)
 
-        # WRITE REPORT
+        # Write report.
         all_methods_without_example[file] = missing_functions + missing_classes + missing_methods
         all_methods_with_example[file] = covered_functions + covered_classes + covered_methods
 
@@ -101,7 +105,7 @@ def create_report(folder_path, output_file=""):
         total = missing + len(all_methods_with_example[file])
 
         covered = total - missing
-        if total!=0:
+        if total != 0:
             percentage_covered = covered/total*100
         else:
             # If no docstring is available in the module, coverage is considered to be 100%.
@@ -136,9 +140,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')
     parser.add_argument('-f', '--folder',
         help='path of the package to perform coverage analysis on')
-    # parser.add_argument('-o', '--output_file', default="", type = str,
-    #     help='path of the report file')
-    # parser.add_argument('-r', '--recurse', default=True, type = bool,
-    #     help='specify whether to recurse into submodules or not')
     args = parser.parse_args()
     create_report(args.folder)
