@@ -49,7 +49,7 @@ Total                                                 5          1     80.0%
         with pytest.raises(Exception):
             example_coverage.create_report(folder_path, match="None module found in: ")
 
-    def test_module_b(self):
+    def test_package_b(self):
         """ The package tested is made of a single module.
         None __init__.py file is available.
         In this module, there is a single private function.
