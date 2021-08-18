@@ -35,7 +35,6 @@ Total                                                 5          1     80.0%
         # Compare the current report content and the reference one.
         assert current_report_content == reference_report_content
 
-
     def test_empty_folder(self):
         """ Provide a folder that does not contain any file or folder."""
         folder_path = os.path.join(self.current_directory, "assets", "EmptyFolder")
@@ -49,7 +48,6 @@ Total                                                 5          1     80.0%
 
         with pytest.raises(Exception):
             example_coverage.create_report(folder_path, match="None module found in: ")
-
 
     def test_module_b(self):
         """ The package tested is made of a single module.
