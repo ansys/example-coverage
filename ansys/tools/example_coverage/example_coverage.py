@@ -1,7 +1,6 @@
 import ast
 import os
 import sys
-import glob
 import argparse
 import pathlib
 
@@ -15,9 +14,6 @@ def find_files(folder_path):
 
     module_extension = ('.py')
     modules = []
-    # for file in glob.glob(os.path.join(folder_path, '*.py')):
-    #     if file.endswith(module_extension) & (not file.endswith("__init__.py")):
-    #         modules.append(file)
 
     for path, subdirs, files in os.walk(folder_path):
         for name in files:
