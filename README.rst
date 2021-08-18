@@ -22,19 +22,12 @@ To post issues, questions, and code, go to `example-coverage Issues
 <https://github.com/pyansys/example-coverage/issues>`_.
 
 
-Connect to Desktop from Python IDE
-----------------------------------
-PyAEDT works both inside AEDT and as a standalone application.
-It automatically detects whether it is running in an IronPython or CPython
-environment and initializes the Desktop accordingly. PyAEDT also provides
-advanced error management. Usage examples follow.
-
 Analyze a module and all the submodules it contains.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: bat
 
-    python example_coverage -p"path_to_pacakge\\__init__.py"
+    python example_coverage -f "path_to_pacakge"
 
 
 Name                                      Methods     Missed   Covered
