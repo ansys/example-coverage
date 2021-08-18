@@ -39,15 +39,18 @@ Total                                                 5          1     80.0%
         """ Provide a folder that does not contain any file or folder."""
         folder_path = os.path.join(self.current_directory, "assets", "EmptyFolder")
 
-        with pytest.raises(Exception):
-            example_coverage.create_report(folder_path, match="None file nor folder available in")
+        with pytest.raises(Exception) as excinfo:
+            example_coverage.create_report(folder_path)
+        assert "None module found in" in str(excinfo.value)
+        assert "EmptyFolder" in str(excinfo.value)
 
     def test_only_init_module(self):
         """ Provide a folder that contains solely an __init__.py file."""
         folder_path = os.path.join(self.current_directory, "assets", "OnlyInit")
 
-        with pytest.raises(Exception):
-            example_coverage.create_report(folder_path, match="None module found in: ")
+        with pytest.raises(Exception) as excinfo:
+            example_coverage.create_report(folder_path)
+        assert "None module found in: " in str(excinfo.value)
 
     def test_package_b(self):
         """ The package tested is made of a single module.
