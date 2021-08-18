@@ -70,7 +70,7 @@ def create_report(folder_path):
 
         missing_methods = []
         covered_methods = []
-        if len(method_definitions)!=0:
+        if len(method_definitions) !=0 :
             for method in method_definitions[0]:
                 # Handle method with decorator.
                 # Property setters should not have any example but getters do.
@@ -78,7 +78,9 @@ def create_report(folder_path):
                     for decorator in method.decorator_list:
                         # Find property getter decorator.
                         if isinstance(decorator, ast.Name) and (decorator.id == "property"):
-                            if ("Example" not in ast.get_docstring(method)):
+                            if ast.get_docstring(method) is None:
+                                missing_methods.append(method.name)
+                            elif ("Example" not in ast.get_docstring(method)):
                                 missing_methods.append(method.name)
                             else:
                                 covered_methods.append(method.name)
@@ -88,7 +90,7 @@ def create_report(folder_path):
                             covered_methods.append(method.name)
                             break;
                     continue;
-
+                # breakpoint()
                 # Private methods are not expected to provide any examples.
                 if method.name.startswith('_'):
                     continue
@@ -96,6 +98,8 @@ def create_report(folder_path):
                     missing_methods.append(method.name)
                 else:
                     covered_methods.append(method.name)
+        if "Hfss" in class_def.name:
+            breakpoint()
 
         # Write report.
         all_methods_without_example[file] = missing_functions + missing_classes + missing_methods
