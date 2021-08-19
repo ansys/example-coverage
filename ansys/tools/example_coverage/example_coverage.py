@@ -119,7 +119,7 @@ def create_report(folder_path):
         total = missing + len(all_methods_with_example[file])
 
         covered = total - missing
-        if total != 0:
+        if total:
             percentage_covered = covered/total*100
         else:
             # If no docstring is available in the module, coverage is considered to be 100%.
