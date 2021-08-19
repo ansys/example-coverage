@@ -22,9 +22,8 @@ def find_files(folder_path):
             if name.endswith(".py") & (not name.endswith("__init__.py")):
                 modules.append(os.path.join(path,name))
 
-    # Raise an exception if none module was discovered in the input folder.
     if not modules:
-        raise Exception(f"None module found in: {folder_path}.")
+        raise FileNotFoundError(f"No python modules found in {folder_path}.")
 
     return modules
 
