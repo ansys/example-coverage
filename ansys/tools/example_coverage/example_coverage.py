@@ -104,7 +104,7 @@ def create_report(folder_path):
                 # Private methods are not expected to provide any examples.
                 if method.name.startswith('_'):
                     continue
-                if (ast.get_docstring(method) is None) or ("Example" not in ast.get_docstring(method)):
+                if ast.get_docstring(method) is None or "Example" not in ast.get_docstring(method):
                     missing_methods.append(method.name)
                 else:
                     covered_methods.append(method.name)
