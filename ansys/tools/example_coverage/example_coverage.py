@@ -15,12 +15,11 @@ def find_files(folder_path):
     if len(os.listdir(folder_path)) == 0:
         raise FileNotFoundError(f"There are no python source files in {folder_paths}.")
 
-    module_extension = ('.py')
     modules = []
 
     for path, subdirs, files in os.walk(folder_path):
         for name in files:
-            if name.endswith(module_extension) & (not name.endswith("__init__.py")):
+            if name.endswith(".py") & (not name.endswith("__init__.py")):
                 modules.append(os.path.join(path,name))
 
     # Raise an exception if none module was discovered in the input folder.
