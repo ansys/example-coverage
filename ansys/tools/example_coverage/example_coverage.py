@@ -72,7 +72,7 @@ def create_report(folder_path):
 
         missing_methods = []
         covered_methods = []
-        if len(method_definitions) !=0 :
+        if method_definitions:
             for method in method_definitions[0]:
                 # Handle method with decorator.
                 # Property setters should not have any example but getters do.
