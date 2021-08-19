@@ -72,7 +72,7 @@ def create_report(folder_path):
 
         missing_methods = []
         covered_methods = []
-        if len(method_definitions) !=0 :
+        if method_definitions:
             for method in method_definitions[0]:
                 # Handle method with decorator.
                 # Property setters should not have any example but getters do.
@@ -91,7 +91,7 @@ def create_report(folder_path):
                                 covered_methods.append(method.name)
                                 property = True
                         # Find property setter decorator.
-                        elif isinstance(decorator,ast.Attribute) and (decorator.attr == "setter"):
+                        elif isinstance(decorator, ast.Attribute) and decorator.attr == "setter":
                             # For setter methods, we consider them covered.
                             covered_methods.append(method.name)
                             property = True
@@ -104,7 +104,7 @@ def create_report(folder_path):
                 # Private methods are not expected to provide any examples.
                 if method.name.startswith('_'):
                     continue
-                if (ast.get_docstring(method) is None) or ("Example" not in ast.get_docstring(method)):
+                if ast.get_docstring(method) is None or "Example" not in ast.get_docstring(method):
                     missing_methods.append(method.name)
                 else:
                     covered_methods.append(method.name)
