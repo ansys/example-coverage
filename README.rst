@@ -30,22 +30,6 @@ To post issues, questions, and code, go to `example-coverage Issues
 <https://github.com/pyansys/example-coverage/issues>`_.
 
 
-Analyze a module and all the submodules it contains.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code:: bat
-
-    python example_coverage -f "path_to_pacakge"
-
-    Name                                      Methods     Missed   Covered
-    -------------------------------------------------------------------------------
-    my_package.moduleA.submolduleA                3          3       0.0%
-    my_package.moduleA.submolduleA                6          3      50.0%
-    my_package.moduleA.submolduleA                1          0     100.0%
-    my_package.moduleB                            4          1      75.0%
-    -------------------------------------------------------------------------------
-    Total                                        14          7        50%
-
 
 License
 -------
