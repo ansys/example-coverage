@@ -141,7 +141,6 @@ def create_report(directory_path):
     print(f'{"Total" : <43}{package_total : 12d}{package_missing : 11d}{package_percentage_covered:9.1f}%')
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')
     parser.add_argument('-f', '--folder',
         help='path of the package to perform coverage analysis on')
