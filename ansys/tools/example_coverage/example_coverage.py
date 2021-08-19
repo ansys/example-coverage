@@ -123,7 +123,7 @@ def create_report(folder_path):
             # If no docstring is available in the module, coverage is considered to be 100%.
             percentage_covered = 100
 
-        module_name = os.path.basename(folder_path) + pathlib.Path(file.split(folder_path)[1].replace(os.path.sep, ".")).stem
+        module_name = os.path.join(os.path.basename(folder_path), pathlib.Path(file.split(folder_path)[1].replace(os.path.sep, ".")).stem)
 
         print(f'{module_name[:42]: <43}{total:12}{missing:11}{percentage_covered:9.1f}%')
 
