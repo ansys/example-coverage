@@ -91,7 +91,7 @@ def create_report(folder_path):
                                 covered_methods.append(method.name)
                                 property = True
                         # Find property setter decorator.
-                        elif isinstance(decorator,ast.Attribute) and (decorator.attr == "setter"):
+                        elif isinstance(decorator, ast.Attribute) and decorator.attr == "setter":
                             # For setter methods, we consider them covered.
                             covered_methods.append(method.name)
                             property = True
