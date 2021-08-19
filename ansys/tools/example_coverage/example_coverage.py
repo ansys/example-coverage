@@ -32,7 +32,7 @@ def find_files(folder_path):
 def create_report(folder_path):
     """Write a report to list all modules and the docstring example
     coverage stats for each of these modules."""
-    print(f'{"Name": <43}{"Methods":>12}{"Missed":>11}{"Covered":>10}')
+    print(f'{"Name": <43}{"Docstrings":>12}{"Missed":>11}{"Covered":>10}')
     print ('-' * 79)
 
     # The key of those dictionaries will be the name of the file.
