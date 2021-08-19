@@ -4,7 +4,7 @@ import sys
 import argparse
 import pathlib
 
-def find_files(folder_path):
+def find_files(directory_path):
     """Find all modules available in the folder path provided.
 
     The selection is made based on the file's extension.
@@ -12,23 +12,18 @@ def find_files(folder_path):
     """
 
     # Raise an exception if the folder is empty.
-    if os.listdir(folder_path):
-        raise FileNotFoundError(f"There are no python source files in {folder_paths}.")
+    if not os.listdir(directory_path):
+        raise FileNotFoundError(f"There are no python source files in {directory_path}.")
 
-    modules = []
-
-    for path, subdirs, files in os.walk(folder_path):
-        for name in files:
-            if name.endswith(".py") & (not name.endswith("__init__.py")):
-                modules.append(os.path.join(path,name))
+    modules = [str(path) for path in pathlib.Path(directory_path).rglob('*.py') if not str(path).endswith("__init__.py")]
 
     # Raise an exception if none module was discovered in the input folder.
     if not modules:
-        raise Exception(f"None module found in: {folder_path}.")
+        raise Exception(f"None module found in: {directory_path}.")
 
     return modules
 
-def create_report(folder_path):
+def create_report(directory_path):
     """Write a report to list all modules and the docstring example
     coverage stats for each of these modules."""
     print(f'{"Name": <43}{"Docstrings":>12}{"Missed":>11}{"Covered":>10}')
@@ -40,7 +35,7 @@ def create_report(folder_path):
     all_methods_without_example = {}
 
     # Abstract tree structure is used to get all functions, classes, methods.
-    for file in find_files(folder_path):
+    for file in find_files(directory_path):
         with open(file) as fd:
             file_contents = fd.read()
         tree = ast.parse(file_contents)
@@ -122,7 +117,7 @@ def create_report(folder_path):
             # If no docstring is available in the module, coverage is considered to be 100%.
             percentage_covered = 100
 
-        module_name = os.path.join(os.path.basename(folder_path), pathlib.Path(file.split(folder_path)[1].replace(os.path.sep, ".")).stem)
+        module_name = os.path.basename(directory_path) + pathlib.Path(file.split(directory_path)[1].replace(os.path.sep, ".")).stem
 
         print(f'{module_name[:42]: <43}{total:12}{missing:11}{percentage_covered:9.1f}%')
 

@@ -13,7 +13,7 @@ class TestClass:
         pass
 
     def test_package_c(self):
-        folder_path = os.path.join(self.current_directory, "assets", "moduleC")
+        folder_path = os.path.join(self.current_directory, "assets", "module_c")
 
         # Redirect stdout.
         capturedOutput = io.StringIO()
@@ -25,9 +25,9 @@ class TestClass:
         # Get the current report content.
         current_report_content = capturedOutput.getvalue()
 
-        reference_report_content = """Name                                            Methods     Missed   Covered
+        reference_report_content = """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
-moduleC.module_c                                      5          1     80.0%
+module_c.module_c                                     5          1     80.0%
 -------------------------------------------------------------------------------
 Total                                                 5          1     80.0%
 """
@@ -37,27 +37,28 @@ Total                                                 5          1     80.0%
 
     def test_empty_folder(self):
         """ Provide a folder that does not contain any file or folder."""
-        folder_path = os.path.join(self.current_directory, "assets", "EmptyFolder")
+        folder_path = os.path.join(self.current_directory, "assets", "empty_folder")
 
         with pytest.raises(Exception) as excinfo:
             example_coverage.create_report(folder_path)
         assert "None module found in" in str(excinfo.value)
-        assert "EmptyFolder" in str(excinfo.value)
+        assert "empty_folder" in str(excinfo.value)
 
     def test_only_init_module(self):
         """ Provide a folder that contains solely an __init__.py file."""
-        folder_path = os.path.join(self.current_directory, "assets", "OnlyInit")
+        folder_path = os.path.join(self.current_directory, "assets", "only_init")
 
         with pytest.raises(Exception) as excinfo:
             example_coverage.create_report(folder_path)
         assert "None module found in: " in str(excinfo.value)
+        assert "only_init" in str(excinfo.value)
 
     def test_package_b(self):
         """ The package tested is made of a single module.
         None __init__.py file is available.
         In this module, there is a single private function.
         So, none example is expected for this entire module."""
-        folder_path = os.path.join(self.current_directory, "assets", "moduleB")
+        folder_path = os.path.join(self.current_directory, "assets", "module_b")
 
         # Redirect stdout.
         capturedOutput = io.StringIO()
@@ -69,9 +70,9 @@ Total                                                 5          1     80.0%
         # Get the current report content.
         current_report_content = capturedOutput.getvalue()
 
-        reference_report_content = """Name                                            Methods     Missed   Covered
+        reference_report_content = """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
-moduleB.module_b                                      0          0    100.0%
+module_b.module_b                                     0          0    100.0%
 -------------------------------------------------------------------------------
 Total                                                 0          0    100.0%
 """
@@ -82,7 +83,7 @@ Total                                                 0          0    100.0%
 
     def test_module_a(self):
         """ The package tested is made of several modules and submodules."""
-        folder_path = os.path.join(self.current_directory, "assets", "moduleA")
+        folder_path = os.path.join(self.current_directory, "assets", "module_a")
 
         # Redirect stdout.
         capturedOutput = io.StringIO()
@@ -94,11 +95,11 @@ Total                                                 0          0    100.0%
         # Get the current report content.
         current_report_content = capturedOutput.getvalue()
 
-        reference_report_content = """Name                                            Methods     Missed   Covered
+        reference_report_content = """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
-moduleA.moduleAA.module_aa                            5          1     80.0%
-moduleA.moduleAA.moduleAAA.module_aaa                 5          1     80.0%
-moduleA.moduleAB.module_ab                            7          1     85.7%
+module_a.module_aa.module_aa                          5          1     80.0%
+module_a.module_aa.module_aaa.module_aaa              5          1     80.0%
+module_a.module_ab.module_ab                          7          1     85.7%
 -------------------------------------------------------------------------------
 Total                                                17          3     82.4%
 """

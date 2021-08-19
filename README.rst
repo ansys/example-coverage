@@ -16,7 +16,7 @@ Example usage:
 
 .. code::
 
-    python -m ansys.tools.example_coverage -f "path_to_pacakge"
+    python -m ansys.tools.example_coverage -f "path_to_package"
 
     Name                                      Methods     Missed   Covered
     -----------------------------------------------------------------------
