@@ -6,8 +6,10 @@ import pathlib
 
 def find_files(folder_path):
     """Find all modules available in the folder path provided.
+
     The selection is made based on the file's extension.
-    However, __init__.py will be discarded."""
+    However, __init__.py will be discarded.
+    """
 
     # Raise an exception if the folder is empty.
     if len(os.listdir(folder_path)) == 0:
