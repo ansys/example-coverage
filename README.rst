@@ -1,7 +1,7 @@
 Introduction
 ------------
 example-coverage is intended to assess and report the docstring examples coverage
-of modules and inner submoldules.
+of modules and submoldules from a given directory.
 example-coverage is licensed under the `MIT License:
 <https://github.com/pyansys/example-coverage/blob/main/LICENSE>`_.
 
