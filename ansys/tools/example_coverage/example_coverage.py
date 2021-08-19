@@ -108,8 +108,6 @@ def create_report(folder_path):
                     missing_methods.append(method.name)
                 else:
                     covered_methods.append(method.name)
-        # if "Hfss" in class_def.name:
-        #     breakpoint()
 
         # Write report.
         all_methods_without_example[file] = missing_functions + missing_classes + missing_methods
