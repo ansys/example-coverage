@@ -6,8 +6,8 @@ example-coverage is licensed under the `MIT License:
 <https://github.com/pyansys/example-coverage/blob/main/LICENSE>`_.
 
 
-What is example-coverage?
----------------
+What does this library do?
+--------------------------
 example-coverage is used to find every modules in a python package.
 An option allows to discover each inner submodules included in the parent modules.
 Then, every modules discovered in the previous task will be parsed to know if
