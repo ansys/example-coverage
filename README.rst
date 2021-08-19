@@ -42,5 +42,3 @@ Analyze a module and all the submodules it contains.
 License
 -------
 example-coverage is licensed under the MIT license.
-
-This example-coverage module makes no commercial claim over Ansys whatsoever.
