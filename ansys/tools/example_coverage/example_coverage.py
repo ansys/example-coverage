@@ -82,7 +82,7 @@ def create_report(folder_path):
                             if ast.get_docstring(method) is None:
                                 missing_methods.append(method.name)
                                 property = True
-                            elif ("Example" not in ast.get_docstring(method)):
+                            elif "Example" not in ast.get_docstring(method):
                                 missing_methods.append(method.name)
                                 property = True
                             else:
