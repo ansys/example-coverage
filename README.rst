@@ -14,6 +14,14 @@ Then, every modules discovered in the previous task will be parsed to know if
 examples are part or not of the docstring.
 Finally a report will be written. It will list the covering percentage for every modules
 analyzed.
+Installation
+------------
+Install with:
+
+.. code::
+
+   pip install ansys-tools-example-coverage
+
 
 
 Issues
