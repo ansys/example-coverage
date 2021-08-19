@@ -17,9 +17,8 @@ def find_files(directory_path):
 
     modules = [str(path) for path in pathlib.Path(directory_path).rglob('*.py') if not str(path).endswith("__init__.py")]
 
-    # Raise an exception if none module was discovered in the input folder.
     if not modules:
-        raise Exception(f"None module found in: {directory_path}.")
+        raise FileNotFoundError(f"No python modules found in {folder_path}.")
 
     return modules
 
