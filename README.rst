@@ -49,4 +49,4 @@ Analyze a module and all the submodules it contains.
 
 License
 -------
-example-coverage is licensed under the MIT license.
+``ansys-tools-example-coverage`` is licensed under the MIT license.
