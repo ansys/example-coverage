@@ -1,5 +1,5 @@
-Introduction
-------------
+ansys-tools-example-coverage
+----------------------------
 example-coverage is intended to assess and report the docstring examples coverage
 of modules and submoldules from a given directory.
 example-coverage is licensed under the `MIT License:
