@@ -80,7 +80,7 @@ def create_report(folder_path):
                 if method.decorator_list:
                     for decorator in method.decorator_list:
                         # Find property getter decorator.
-                        if isinstance(decorator, ast.Name) and (decorator.id == "property"):
+                        if isinstance(decorator, ast.Name) and decorator.id == "property":
                             if ast.get_docstring(method) is None:
                                 missing_methods.append(method.name)
                                 property = True
