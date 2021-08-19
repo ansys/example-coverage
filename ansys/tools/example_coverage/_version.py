@@ -1,6 +1,6 @@
 """Version of ``ansys-tools-example-coverage`` module.
 
-On the ``master`` branch, use 'dev0' to denote a development version.
+On the ``main`` branch, use 'dev0' to denote a development version.
 For example:
 
 version_info = 0, 58, 'dev0'
