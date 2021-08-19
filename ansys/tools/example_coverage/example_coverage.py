@@ -11,7 +11,7 @@ def find_files(folder_path):
 
     # Raise an exception if the folder is empty.
     if len(os.listdir(folder_path)) == 0:
-        raise Exception(f"None file nor folder available in {folder_paths}.")
+        raise FileNotFoundError(f"There are no python source files in {folder_paths}.")
 
     module_extension = ('.py')
     modules = []
