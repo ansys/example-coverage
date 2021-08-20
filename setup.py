@@ -31,7 +31,7 @@ setuptools.setup(
     name="example-coverage",
     version=__version__,
     author='ANSYS, Inc.',
-    author_email="maxime.rey@ansys.com",
+    maintainer_email="maxime.rey@ansys.com",
     description="Tools to assess the docstring examples coverage.",
     long_description=long_description,
     long_description_content_type="text/markdown",
