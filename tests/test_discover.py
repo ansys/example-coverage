@@ -41,7 +41,7 @@ Total                                                 5          1     80.0%
 
         with pytest.raises(Exception) as excinfo:
             example_coverage.create_report(folder_path)
-        assert "None module found in" in str(excinfo.value)
+        assert "No python modules found in:" in str(excinfo.value)
         assert "empty_folder" in str(excinfo.value)
 
     def test_only_init_module(self):
@@ -50,7 +50,7 @@ Total                                                 5          1     80.0%
 
         with pytest.raises(Exception) as excinfo:
             example_coverage.create_report(folder_path)
-        assert "None module found in: " in str(excinfo.value)
+        assert "No python modules found in: " in str(excinfo.value)
         assert "only_init" in str(excinfo.value)
 
     def test_package_b(self):
@@ -102,6 +102,31 @@ module_a.module_aa.module_aaa.module_aaa              5          1     80.0%
 module_a.module_ab.module_ab                          7          1     85.7%
 -------------------------------------------------------------------------------
 Total                                                17          3     82.4%
+"""
+
+        # Compare the current report content and the reference one.
+        assert current_report_content == reference_report_content
+
+
+    def test_module_d(self):
+        """ The package tested contains several decorators."""
+        folder_path = os.path.join(self.current_directory, "assets", "module_d")
+
+        # Redirect stdout.
+        capturedOutput = io.StringIO()
+        sys.stdout = capturedOutput
+        example_coverage.create_report(folder_path)
+        # Reset redirect.
+        sys.stdout = sys.__stdout__
+
+        # Get the current report content.
+        current_report_content = capturedOutput.getvalue()
+
+        reference_report_content = """Name                                         Docstrings     Missed   Covered
+-------------------------------------------------------------------------------
+module_d.module_d                                     8          3     62.5%
+-------------------------------------------------------------------------------
+Total                                                 8          3     62.5%
 """
 
         # Compare the current report content and the reference one.
