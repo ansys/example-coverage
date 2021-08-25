@@ -2,100 +2,60 @@ import os
 import sys
 import pytest
 import io
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', "ansys", "tools", "example_coverage")))
-import example_coverage
 
-class TestClass:
-    def setup_class(self):
-        self.current_directory = os.getcwd()
+# import example_coverage
 
-    def teardown_class(self):
-        pass
+ASSET_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
-    def test_package_c(self):
-        folder_path = os.path.join(self.current_directory, "assets", "module_c")
 
-        # Redirect stdout.
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput
-        example_coverage.create_report(folder_path)
-        # Reset redirect.
+class CaptureStdOut():
+    """Capture standard output with a context manager."""
+
+    def __init__(self):
+        self._stream = io.StringIO()
+        
+    def __enter__(self):
+        sys.stdout = self._stream
+
+    def __exit__(self, type, value, traceback):
         sys.stdout = sys.__stdout__
 
-        # Get the current report content.
-        current_report_content = capturedOutput.getvalue()
-
-        reference_report_content = """Name                                         Docstrings     Missed   Covered
--------------------------------------------------------------------------------
-module_c.module_c                                     5          1     80.0%
--------------------------------------------------------------------------------
-Total                                                 5          1     80.0%
-"""
-
-        # Compare the current report content and the reference one.
-        assert current_report_content == reference_report_content
-
-    def test_empty_folder(self):
-        """ Provide a folder that does not contain any file or folder."""
-        folder_path = os.path.join(self.current_directory, "assets", "empty_folder")
-
-        with pytest.raises(Exception) as excinfo:
-            example_coverage.create_report(folder_path)
-        assert "No python modules found in:" in str(excinfo.value)
-        assert "empty_folder" in str(excinfo.value)
-
-    def test_only_init_module(self):
-        """ Provide a folder that contains solely an __init__.py file."""
-        folder_path = os.path.join(self.current_directory, "assets", "only_init")
-
-        with pytest.raises(Exception) as excinfo:
-            example_coverage.create_report(folder_path)
-        assert "No python modules found in: " in str(excinfo.value)
-        assert "only_init" in str(excinfo.value)
-
-    def test_package_b(self):
-        """ The package tested is made of a single module.
-        None __init__.py file is available.
-        In this module, there is a single private function.
-        So, none example is expected for this entire module."""
-        folder_path = os.path.join(self.current_directory, "assets", "module_b")
-
-        # Redirect stdout.
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput
-        example_coverage.create_report(folder_path)
-        # Reset redirect.
-        sys.stdout = sys.__stdout__
-
-        # Get the current report content.
-        current_report_content = capturedOutput.getvalue()
-
-        reference_report_content = """Name                                         Docstrings     Missed   Covered
--------------------------------------------------------------------------------
-module_b.module_b                                     0          0    100.0%
--------------------------------------------------------------------------------
-Total                                                 0          0    100.0%
-"""
-
-        # Compare the current report content and the reference one.
-        assert current_report_content == reference_report_content
+    @property
+    def content(self):
+        """Return the captured content."""
+        return self._stream.getvalue()
 
 
-    def test_module_a(self):
-        """ The package tested is made of several modules and submodules."""
-        folder_path = os.path.join(self.current_directory, "assets", "module_a")
+def test_empty_folder():
+    """ Provide a folder that does not contain any file or folder."""
 
-        # Redirect stdout.
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput
-        example_coverage.create_report(folder_path)
-        # Reset redirect.
-        sys.stdout = sys.__stdout__
+    path = os.path.join(ASSET_DIRECTORY, "empty_folder")
 
-        # Get the current report content.
-        current_report_content = capturedOutput.getvalue()
+    with pytest.raises(Exception) as excinfo:
+        example_coverage.create_report(path)
+    assert "No python modules found in:" in str(excinfo.value)
+    assert "empty_folder" in str(excinfo.value)
 
-        reference_report_content = """Name                                         Docstrings     Missed   Covered
+
+def test_only_init_module():
+    """ Provide a folder that contains solely an __init__.py file."""
+    path = os.path.join(ASSET_DIRECTORY, "only_init")
+
+    with pytest.raises(Exception) as excinfo:
+        example_coverage.create_report(path)
+    assert "No python modules found in: " in str(excinfo.value)
+    assert "only_init" in str(excinfo.value)
+
+
+def test_module_a():
+    """ The package tested is made of several modules and submodules."""
+    path = os.path.join(ASSET_DIRECTORY, "module_a")
+
+    capture = CaptureStdOut()
+    with capture:
+        example_coverage.create_report(path)
+
+    assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
 module_a.module_aa.module_aa                          5          1     80.0%
 module_a.module_aa.module_aaa.module_aaa              5          1     80.0%
@@ -104,30 +64,50 @@ module_a.module_ab.module_ab                          7          1     85.7%
 Total                                                17          3     82.4%
 """
 
-        # Compare the current report content and the reference one.
-        assert current_report_content == reference_report_content
+def test_package_b():
+    """ The package tested is made of a single module.
+    None __init__.py file is available.
+    In this module, there is a single private function.
+    So, none example is expected for this entire module."""
+    path = os.path.join(ASSET_DIRECTORY, "module_b")
+
+    capture = CaptureStdOut()
+    with capture:
+        example_coverage.create_report(path)
+
+    assert capture.content == """Name                                         Docstrings     Missed   Covered
+-------------------------------------------------------------------------------
+module_b.module_b                                     0          0    100.0%
+-------------------------------------------------------------------------------
+Total                                                 0          0    100.0%
+"""
 
 
-    def test_module_d(self):
-        """ The package tested contains several decorators."""
-        folder_path = os.path.join(self.current_directory, "assets", "module_d")
+def test_package_c():
+    path = os.path.join(ASSET_DIRECTORY, "module_c")
 
-        # Redirect stdout.
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput
-        example_coverage.create_report(folder_path)
-        # Reset redirect.
-        sys.stdout = sys.__stdout__
+    capture = CaptureStdOut()
+    with capture:
+        example_coverage.create_report(path)
 
-        # Get the current report content.
-        current_report_content = capturedOutput.getvalue()
+    assert capture.content == """Name                                         Docstrings     Missed   Covered
+-------------------------------------------------------------------------------
+module_c.module_c                                     5          1     80.0%
+-------------------------------------------------------------------------------
+Total                                                 5          1     80.0%
+"""
 
-        reference_report_content = """Name                                         Docstrings     Missed   Covered
+def test_module_d():
+    """The package tested contains several decorators."""
+    path = os.path.join(ASSET_DIRECTORY, "module_d")
+
+    capture = CaptureStdOut()
+    with capture:
+        example_coverage.create_report(path)
+
+    assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
 module_d.module_d                                     8          3     62.5%
 -------------------------------------------------------------------------------
 Total                                                 8          3     62.5%
 """
-
-        # Compare the current report content and the reference one.
-        assert current_report_content == reference_report_content
