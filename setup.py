@@ -28,13 +28,13 @@ for package in find_namespace_packages(include='ansys*'):
 
 
 setuptools.setup(
-    name="example-coverage",
+    name="ansys-tools-example-coverage",
     version=__version__,
     author='ANSYS, Inc.',
     maintainer_email="maxime.rey@ansys.com",
     description="Tools to assess the docstring examples coverage.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://github.com/pyansys/example-coverage",
     project_urls={
         "Bug Tracker": "https://github.com/pyansys/example-coverage/issues",
