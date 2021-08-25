@@ -4,6 +4,7 @@ import sys
 import argparse
 import pathlib
 
+
 def find_files(directory_path):
     """Find all modules available in the folder path provided.
 
@@ -21,6 +22,7 @@ def find_files(directory_path):
         raise FileNotFoundError(f"No python modules found in: {directory_path}.")
 
     return modules
+
 
 def create_report(directory_path):
     """Write a report to list all modules and the docstring example
@@ -139,6 +141,7 @@ def create_report(directory_path):
         package_percentage_covered = 100
     print ('-' * 79)
     print(f'{"Total" : <43}{package_total : 12d}{package_missing : 11d}{package_percentage_covered:9.1f}%')
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')

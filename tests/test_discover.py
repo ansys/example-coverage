@@ -3,9 +3,11 @@ import sys
 import pytest
 import io
 
-# import example_coverage
+from ansys.tools.example_coverage import create_report
 
-ASSET_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
+THIS_PATH = os.path.dirname(os.path.abspath(__file__))
+ASSET_DIRECTORY = os.path.join(THIS_PATH, 'assets')
 
 
 class CaptureStdOut():
@@ -28,13 +30,12 @@ class CaptureStdOut():
 
 def test_empty_folder():
     """ Provide a folder that does not contain any file or folder."""
-
-    path = os.path.join(ASSET_DIRECTORY, "empty_folder")
+    path = os.path.join(ASSET_DIRECTORY, "empty_")
 
     with pytest.raises(Exception) as excinfo:
-        example_coverage.create_report(path)
+        create_report(path)
     assert "No python modules found in:" in str(excinfo.value)
-    assert "empty_folder" in str(excinfo.value)
+    assert "empty_" in str(excinfo.value)
 
 
 def test_only_init_module():
@@ -42,7 +43,7 @@ def test_only_init_module():
     path = os.path.join(ASSET_DIRECTORY, "only_init")
 
     with pytest.raises(Exception) as excinfo:
-        example_coverage.create_report(path)
+        create_report(path)
     assert "No python modules found in: " in str(excinfo.value)
     assert "only_init" in str(excinfo.value)
 
@@ -53,7 +54,7 @@ def test_module_a():
 
     capture = CaptureStdOut()
     with capture:
-        example_coverage.create_report(path)
+        create_report(path)
 
     assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
@@ -73,7 +74,7 @@ def test_package_b():
 
     capture = CaptureStdOut()
     with capture:
-        example_coverage.create_report(path)
+        create_report(path)
 
     assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
@@ -88,7 +89,7 @@ def test_package_c():
 
     capture = CaptureStdOut()
     with capture:
-        example_coverage.create_report(path)
+        create_report(path)
 
     assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
@@ -103,7 +104,7 @@ def test_module_d():
 
     capture = CaptureStdOut()
     with capture:
-        example_coverage.create_report(path)
+        create_report(path)
 
     assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
