@@ -28,17 +28,24 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: 'Build and validate source distribution'
+      - name: Build and validate source distribution
         run: |
           python setup.py sdist
-          python -m pip install twine
-          python -m twine check dist/*
+          pip install twine
+          twine check dist/*
 
-      - name: 'Unit testing'
-        run: | 
-          pytest -v --cov=pytest-azurepipelines --cov=tests --cov-config=.coveragerc -cov-report=xml --junitxml=junit/test-results.xml tests -p no:faulthandler
+      - name: Install source dist
+        run: |
+          pip install dist/*
+
+      - name: Unit testing
+        run: |
+          pip install -r requirements_test.txt
+          pip install pytest-azurepipelines
+          cd tests  # run within the test directory to test the install
+          pytest -v --cov ansys.tools.example_coverage --cov-report html
     
-      - name: "Build and upload to PyPI"
+      - name: Build and upload to PyPI
         if: startsWith(github.ref, 'refs/tags')
         run: |
           python setup.py sdist

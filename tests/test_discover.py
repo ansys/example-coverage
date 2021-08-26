@@ -1,7 +1,8 @@
 import os
 import sys
-import pytest
 import io
+
+import pytest
 
 from ansys.tools.example_coverage import create_report
 
