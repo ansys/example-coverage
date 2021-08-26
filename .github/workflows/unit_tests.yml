@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: TESTING
+name: Testing
 
 env:
   python.version: 3.8
@@ -56,13 +54,6 @@ jobs:
         run: | 
           testenv\Scripts\Activate.ps1
           pytest -v --cov=pytest-azurepipelines --cov=tests --cov-config=.coveragerc -cov-report=xml --junitxml=junit/test-results.xml tests -p no:faulthandler
-
-      # - name: Docstring testing
-      #   run: |
-      #     testenv\Scripts\Activate.ps1
-      #     pip install pytest
-      #     pytest -v pyaedt/desktop.py pyaedt/icepak.py
-      #     pytest -v pyaedt/desktop.py pyaedt/hfss.py
 
       - name: 'Coverage'
         run: |
