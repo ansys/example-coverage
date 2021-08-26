@@ -8,7 +8,7 @@ from ansys.tools.example_coverage import create_report
 
 
 THIS_PATH = os.path.dirname(os.path.abspath(__file__))
-ASSET_DIRECTORY = os.path.join(THIS_PATH, 'assets')
+ASSETS_DIRECTORY = os.path.join(THIS_PATH, 'assets')
 
 
 class CaptureStdOut():
