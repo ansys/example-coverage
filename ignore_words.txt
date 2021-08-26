@@ -1,5 +1,3 @@
-REnabled
-renabled
 delet
 appen
 parm
@@ -12,7 +10,6 @@ wan
 levl
 mater
 aadd
-extrem
 imagin
 ist
 nin
