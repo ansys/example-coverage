@@ -1,4 +1,4 @@
-name: Unit Testing
+name: Build, test, deploy
 
 env:
   python.version: 3.8

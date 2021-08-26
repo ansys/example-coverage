@@ -36,8 +36,8 @@ def create_report(directory_path):
     all_methods_without_example = {}
 
     # Abstract tree structure is used to get all functions, classes, methods.
-    for file in find_files(directory_path):
-        with open(file) as fd:
+    for file_name in find_files(directory_path):
+        with open(file_name) as fd:
             file_contents = fd.read()
         tree = ast.parse(file_contents)
 
@@ -59,7 +59,7 @@ def create_report(directory_path):
         missing_classes = []
         covered_classes = []
         for class_def in class_definitions:
-            method_definitions.append([node for node in class_def.body if isinstance(node, ast.FunctionDef)])
+            method_definitions.extend([node for node in class_def.body if isinstance(node, ast.FunctionDef)])
             if (ast.get_docstring(class_def) is None) or ("Example" not in ast.get_docstring(class_def)):
                 missing_classes.append(class_def.name)
             else:
@@ -68,32 +68,32 @@ def create_report(directory_path):
         missing_methods = []
         covered_methods = []
         if method_definitions:
-            for method in method_definitions[0]:
+            for method in method_definitions:
                 # Handle method with decorator.
                 # Property setters should not have any example but getters do.
-                property = False
+                prop = False
                 if method.decorator_list:
                     for decorator in method.decorator_list:
                         # Find property getter decorator.
                         if isinstance(decorator, ast.Name) and decorator.id == "property":
                             if ast.get_docstring(method) is None:
                                 missing_methods.append(method.name)
-                                property = True
+                                prop = True
                             elif "Example" not in ast.get_docstring(method):
                                 missing_methods.append(method.name)
-                                property = True
+                                prop = True
                             else:
                                 covered_methods.append(method.name)
-                                property = True
+                                prop = True
                         # Find property setter decorator.
                         elif isinstance(decorator, ast.Attribute) and decorator.attr == "setter":
                             # For setter methods, we consider them covered.
                             covered_methods.append(method.name)
-                            property = True
+                            prop = True
 
                 # If the method was a property, it has already been dealt with.
                 # There is no need to continue the current method inspection.
-                if property:
+                if prop:
                     continue
 
                 # Private methods are not expected to provide any examples.
@@ -105,11 +105,11 @@ def create_report(directory_path):
                     covered_methods.append(method.name)
 
         # Write report.
-        all_methods_without_example[file] = missing_functions + missing_classes + missing_methods
-        all_methods_with_example[file] = covered_functions + covered_classes + covered_methods
+        all_methods_without_example[file_name] = missing_functions + missing_classes + missing_methods
+        all_methods_with_example[file_name] = covered_functions + covered_classes + covered_methods
 
-        missing = len(all_methods_without_example[file])
-        total = missing + len(all_methods_with_example[file])
+        missing = len(all_methods_without_example[file_name])
+        total = missing + len(all_methods_with_example[file_name])
 
         covered = total - missing
         if total:
@@ -118,7 +118,7 @@ def create_report(directory_path):
             # If no docstring is available in the module, coverage is considered to be 100%.
             percentage_covered = 100
 
-        module_name = os.path.basename(directory_path) + pathlib.Path(file.split(directory_path)[1].replace(os.path.sep, ".")).stem
+        module_name = os.path.basename(directory_path) + pathlib.Path(file_name.split(directory_path)[1].replace(os.path.sep, ".")).stem
 
         print(f'{module_name[:42]: <43}{total:12}{missing:11}{percentage_covered:9.1f}%')
 
@@ -141,11 +141,3 @@ def create_report(directory_path):
         package_percentage_covered = 100
     print ('-' * 79)
     print(f'{"Total" : <43}{package_total : 12d}{package_missing : 11d}{package_percentage_covered:9.1f}%')
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')
-    parser.add_argument('-f', '--folder',
-        help='path of the package to perform coverage analysis on')
-    args = parser.parse_args()
-    create_report(args.folder)
