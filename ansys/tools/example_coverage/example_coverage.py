@@ -21,7 +21,7 @@ def find_files(directory_path):
     if not modules:
         raise FileNotFoundError(f"No python modules found in: {directory_path}.")
 
-    return modules
+    return sorted(modules)
 
 
 def create_report(directory_path):
