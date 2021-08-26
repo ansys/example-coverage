@@ -31,7 +31,7 @@ class CaptureStdOut():
 
 def test_empty_folder():
     """ Provide a folder that does not contain any file or folder."""
-    path = os.path.join(ASSET_DIRECTORY, "empty_")
+    path = os.path.join(ASSETS_DIRECTORY, "empty_")
 
     with pytest.raises(Exception) as excinfo:
         create_report(path)
@@ -41,7 +41,7 @@ def test_empty_folder():
 
 def test_only_init_module():
     """ Provide a folder that contains solely an __init__.py file."""
-    path = os.path.join(ASSET_DIRECTORY, "only_init")
+    path = os.path.join(ASSETS_DIRECTORY, "only_init")
 
     with pytest.raises(Exception) as excinfo:
         create_report(path)
@@ -51,7 +51,7 @@ def test_only_init_module():
 
 def test_module_a():
     """ The package tested is made of several modules and submodules."""
-    path = os.path.join(ASSET_DIRECTORY, "module_a")
+    path = os.path.join(ASSETS_DIRECTORY, "module_a")
 
     capture = CaptureStdOut()
     with capture:
@@ -71,7 +71,7 @@ def test_package_b():
     None __init__.py file is available.
     In this module, there is a single private function.
     So, none example is expected for this entire module."""
-    path = os.path.join(ASSET_DIRECTORY, "module_b")
+    path = os.path.join(ASSETS_DIRECTORY, "module_b")
 
     capture = CaptureStdOut()
     with capture:
@@ -86,7 +86,7 @@ Total                                                 0          0    100.0%
 
 
 def test_package_c():
-    path = os.path.join(ASSET_DIRECTORY, "module_c")
+    path = os.path.join(ASSETS_DIRECTORY, "module_c")
 
     capture = CaptureStdOut()
     with capture:
@@ -101,7 +101,7 @@ Total                                                 5          1     80.0%
 
 def test_module_d():
     """The package tested contains several decorators."""
-    path = os.path.join(ASSET_DIRECTORY, "module_d")
+    path = os.path.join(ASSETS_DIRECTORY, "module_d")
 
     capture = CaptureStdOut()
     with capture:
