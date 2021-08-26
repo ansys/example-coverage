@@ -26,6 +26,7 @@ Example usage:
     my_package.my_module_b                          4          1      75.0%
     -----------------------------------------------------------------------
     Total                                          14          7        50%
+
 Installation
 ------------
 Install with:
