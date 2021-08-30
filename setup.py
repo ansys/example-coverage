@@ -1,7 +1,6 @@
 import setuptools
 import os
 from io import open as io_open
-from setuptools import setup, find_packages, find_namespace_packages
 
 
 with open("README.rst", "r", encoding="utf-8") as fh:
@@ -22,7 +21,7 @@ with io_open(version_file, mode='r') as fd:
 
 # find namespace packages
 packages = []
-for package in find_namespace_packages(include='ansys*'):
+for package in setuptools.find_namespace_packages(include='ansys*'):
     if package.startswith('ansys.tools.example_coverage'):
         packages.append(package)
 

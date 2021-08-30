@@ -16,7 +16,7 @@ class CaptureStdOut():
 
     def __init__(self):
         self._stream = io.StringIO()
-        
+
     def __enter__(self):
         sys.stdout = self._stream
 
@@ -49,7 +49,7 @@ def test_only_init_module():
     assert "only_init" in str(excinfo.value)
 
 
-def test_module_a():
+def test_package_a():
     """ The package tested is made of several modules and submodules."""
     path = os.path.join(ASSETS_DIRECTORY, "module_a")
 
@@ -65,6 +65,7 @@ module_a.module_ab.module_ab                          7          1     85.7%
 -------------------------------------------------------------------------------
 Total                                                17          3     82.4%
 """
+
 
 def test_package_b():
     """ The package tested is made of a single module.
@@ -99,7 +100,8 @@ module_c.module_c                                     5          1     80.0%
 Total                                                 5          1     80.0%
 """
 
-def test_module_d():
+
+def test_package_d():
     """The package tested contains several decorators."""
     path = os.path.join(ASSETS_DIRECTORY, "module_d")
 
