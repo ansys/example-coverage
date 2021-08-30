@@ -16,7 +16,7 @@ class CaptureStdOut():
 
     def __init__(self):
         self._stream = io.StringIO()
-        
+
     def __enter__(self):
         sys.stdout = self._stream
 
