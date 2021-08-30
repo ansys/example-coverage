@@ -1,5 +1,6 @@
 [flake8]
 exclude = venv, __init__.py
+select = E,F,W,C90
 count = True
 show-source = True
 max-complexity = 22
