@@ -38,11 +38,11 @@ jobs:
         run: |
           pip install dist/*
 
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are non-compliance items
-        pip install flake8
-        flake8 . --count --show-source --max-complexity=22 --max-line-length=100
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are non-compliance items
+          pip install flake8
+          flake8 . --count --show-source --max-complexity=22 --max-line-length=100
 
       - name: Unit testing
         run: |
