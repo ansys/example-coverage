@@ -40,8 +40,7 @@ def test_empty_folder():
 
 
 def test_empty_folder_non_recursiveness():
-    """ Provide a folder that does not contain any file or folder.
-    Recusrviness is disabled."""
+    """Ensure that no source files are returned when recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "empty_")
 
     with pytest.raises(Exception) as excinfo:
