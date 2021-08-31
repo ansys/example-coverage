@@ -95,16 +95,25 @@ def test_package_a_non_recursiveness():
     path = os.path.join(ASSETS_DIRECTORY, "module_a")
 
     capture = CaptureStdOut()
+    with pytest.raises(Exception) as excinfo:
+        create_report(path, False)
+    assert "No python modules found in: " in str(excinfo.value)
+    assert "module_a" in str(excinfo.value)
+
+
+def test_package_aa_non_recustiveness():
+    """ The package tested is made of several modules and submodules."""
+    path = os.path.join(ASSETS_DIRECTORY, "module_a", "module_aa")
+
+    capture = CaptureStdOut()
     with capture:
         create_report(path, False)
 
     assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
 module_a.module_aa.module_aa                          5          1     80.0%
-module_a.module_aa.module_aaa.module_aaa              5          1     80.0%
-module_a.module_ab.module_ab                          7          1     85.7%
 -------------------------------------------------------------------------------
-Total                                                17          3     82.4%
+Total                                                 5          1     80.0%
 """
 
 
