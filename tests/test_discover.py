@@ -155,7 +155,7 @@ Total                                                 0          0    100.0%
 
 
 def test_package_c():
-    """The package tested contains standard property. Recusrviness is disabled."""
+    """The package tested contains standard property. Recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "module_c")
 
     capture = CaptureStdOut()
