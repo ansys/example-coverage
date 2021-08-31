@@ -94,7 +94,6 @@ def test_package_a_non_recursiveness():
     Recusrviness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "module_a")
 
-    capture = CaptureStdOut()
     with pytest.raises(Exception) as excinfo:
         create_report(path, False)
     assert "No python modules found in: " in str(excinfo.value)
