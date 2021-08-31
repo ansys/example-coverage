@@ -61,7 +61,7 @@ def test_only_init_module():
 
 def test_only_init_module_non_recursiveness():
     """ Provide a folder that contains solely an __init__.py file.
-    Recusrviness is disabled."""
+    Recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "only_init")
 
     with pytest.raises(Exception) as excinfo:
