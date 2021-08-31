@@ -13,5 +13,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Evaluate example coverage of a package.')
     parser.add_argument('-f', '--folder',
                         help='path of the package to perform coverage analysis on')
+    parser.add_argument('-r', '--recursive', type=bool,
+                        help='Specify the package inspection recursiveness. Default = True')
     args = parser.parse_args()
     create_report(args.folder)
