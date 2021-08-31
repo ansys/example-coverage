@@ -203,7 +203,7 @@ Total                                                 8          3     62.5%
 
 
 def test_package_d_non_recursive():
-    """The package tested contains several decorators. Recusrviness is disabled."""
+    """The package tested contains several decorators. Recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "module_d")
 
     capture = CaptureStdOut()
