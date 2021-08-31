@@ -139,7 +139,7 @@ def test_package_b_non_recursiveness():
     None __init__.py file is available.
     In this module, there is a single private function.
     So, none example is expected for this entire module.
-    Recusrviness is disabled."""
+    Recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "module_b")
 
     capture = CaptureStdOut()
