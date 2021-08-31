@@ -110,7 +110,7 @@ def test_package_aa_non_recustiveness():
 
     assert capture.content == """Name                                         Docstrings     Missed   Covered
 -------------------------------------------------------------------------------
-module_a.module_aa                                    5          1     80.0%
+module_aa.module_aa                                   5          1     80.0%
 -------------------------------------------------------------------------------
 Total                                                 5          1     80.0%
 """
