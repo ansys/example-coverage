@@ -30,7 +30,7 @@ class CaptureStdOut():
 
 
 def test_empty_folder():
-    """ Provide a folder that does not contain any file or folder."""
+    """ Test a folder that does not contain any file or folder."""
     path = os.path.join(ASSETS_DIRECTORY, "empty_")
 
     with pytest.raises(Exception) as excinfo:
@@ -50,7 +50,7 @@ def test_empty_folder_non_recursiveness():
 
 
 def test_only_init_module():
-    """ Provide a folder that contains solely an __init__.py file."""
+    """ Test a folder that contains solely an __init__.py file."""
     path = os.path.join(ASSETS_DIRECTORY, "only_init")
 
     with pytest.raises(Exception) as excinfo:
@@ -60,7 +60,7 @@ def test_only_init_module():
 
 
 def test_only_init_module_non_recursiveness():
-    """ Provide a folder that contains solely an __init__.py file.
+    """ Test a folder that contains solely an __init__.py file.
     Recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "only_init")
 
