@@ -90,7 +90,7 @@ Total                                                17          3     82.4%
 
 def test_package_a_non_recursiveness():
     """ The package tested is made of several modules and submodules.
-    Recusrviness is disabled."""
+    Recursiveness is disabled."""
     path = os.path.join(ASSETS_DIRECTORY, "module_a")
 
     with pytest.raises(Exception) as excinfo:
