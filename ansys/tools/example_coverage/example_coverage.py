@@ -3,8 +3,9 @@ import os
 import pathlib
 
 
-def find_files(directory_path):
+def find_files(directory_path, recursive=True):
     """Find all modules available in the folder path provided.
+    The directory inspection can be either recursive or not.
 
     The selection is made based on the file's extension.
     However, __init__.py will be discarded.
@@ -14,16 +15,22 @@ def find_files(directory_path):
     if not os.listdir(directory_path):
         raise FileNotFoundError(f"There are no python source files in {directory_path}.")
 
-    modules = [str(path) for path in pathlib.Path(directory_path).rglob('*.py')
-               if not str(path).endswith("__init__.py")]
-
+    if recursive:
+        modules = [str(path) for path in pathlib.Path(directory_path).rglob('*.py')
+                if not str(path).endswith("__init__.py")]
+    else:
+        modules = [os.path.join(directory_path, file) for file in os.listdir(directory_path)
+                 if os.path.isfile(os.path.join(directory_path, file))
+                 if pathlib.Path(os.path.join(directory_path, file)).suffix == ".py"
+                 if not file.endswith("__init__.py")]
+    breakpoint()
     if not modules:
         raise FileNotFoundError(f"No python modules found in: {directory_path}.")
 
     return sorted(modules)
 
 
-def create_report(directory_path):
+def create_report(directory_path, recursive=True):
     """Write a report to list all modules and the docstring example
     coverage stats for each of these modules."""
     print(f'{"Name": <43}{"Docstrings":>12}{"Missed":>11}{"Covered":>10}')
@@ -35,7 +42,7 @@ def create_report(directory_path):
     all_methods_without_example = {}
 
     # Abstract tree structure is used to get all functions, classes, methods.
-    for file_name in find_files(directory_path):
+    for file_name in find_files(directory_path, recursive):
         with open(file_name) as fd:
             file_contents = fd.read()
         tree = ast.parse(file_contents)
