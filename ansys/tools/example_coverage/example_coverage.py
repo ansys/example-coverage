@@ -23,7 +23,6 @@ def find_files(directory_path, recursive=True):
                    if os.path.isfile(os.path.join(directory_path, file))
                    if pathlib.Path(os.path.join(directory_path, file)).suffix == ".py"
                    if not file.endswith("__init__.py")]
-    breakpoint()
     if not modules:
         raise FileNotFoundError(f"No python modules found in: {directory_path}.")
 
