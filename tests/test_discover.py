@@ -99,7 +99,7 @@ def test_package_a_non_recursiveness():
     assert "module_a" in str(excinfo.value)
 
 
-def test_package_aa_non_recustiveness():
+def test_package_aa_non_recursiveness():
     """ The package tested is made of several modules and submodules."""
     path = os.path.join(ASSETS_DIRECTORY, "module_a", "module_aa")
 
